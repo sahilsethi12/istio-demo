@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+
+
+
+
+	<camelContext id="nsdlfrontendxontext" xmlns="http://camel.apache.org/schema/spring">
+
+
+
+					<restConfiguration component="jetty" port="9093" inlineRoutes="true" >
+						<apiProperty key="cors" value="true"/>
+					</restConfiguration>
+
+					<rest path="/rest/v1.0">
+
+
+						<get consumes="application/json"  produces="application/json" path="/PanVerification">
+							<description>Generate OTP Route</description>
+							<to uri="direct:route-PanVerificationRouteMain"/>
+						</get>
+
+
+
+					</rest>
+
+					<route autoStartup="true" id="PanVerificationRouteMain" streamCache="true">
+
+						<from id="PanVerification_from7" uri="direct:route-PanVerificationRouteMain"/>
+
+						<setBody>
+							<simple>{"Server":"v1","message":"Hello from v1 version"}</simple>
+						</setBody>
+
+						<log message="Hello I am hit from v1 and body is ${body}"/>
+
+					</route>
+
+
+
+	</camelContext>
+</beans>
